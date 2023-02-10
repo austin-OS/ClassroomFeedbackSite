@@ -1,0 +1,22 @@
+<div  style="width:100%" id="<%= dom_id presentation %>">
+
+  <tr>
+  <td>
+    <strong><%= link_to presentation.name, presentation %></strong>
+  </td>
+
+  <td>
+    <strong>Date:</strong>
+    <%= presentation.date %>
+  </td>
+
+  <td>
+    <strong>Presenters:</strong>
+    <ul id="pres-table">
+      <% presentation.users.each do |presenter| %>
+        <li><%=presenter.name %></li>
+      <% end %>
+    </ul>
+  </td>
+
+</div>

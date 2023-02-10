@@ -1,0 +1,28 @@
+
+<%# For logged in users only %>
+<% if logged_in? %>
+  <% provide(:title, "Presentations")%>
+
+  <p style="color: green"><%= notice %></p>
+
+  <div class="center display-table jumbotron">
+  <h1>Presentations</h1>
+  <br>
+  <table>
+  <div id="presentations">
+    <% @presentations.each do |presentation| %>
+      <%# displays all presentations if admin, students only see presentations they are associated with %>
+      <% if current_user.admin? || current_user.presentations.include?(presentation) %>
+        <%= render presentation %>
+      <% end %>
+    <% end %>
+  </div>
+  </table>
+  <br>
+  <br>
+  <%= link_to "New presentation", new_presentation_path, class: "btn btn-primary" %>
+  </div>
+<%# Showing forbidden if a non-user tries to access %>
+<% else %> 
+  <%= render 'layouts/forbidden' %>
+<% end %>

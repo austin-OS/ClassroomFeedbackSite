@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# one:
+#   internal_name: MyString
+#   descriptor: MyString
+#   question_type_id: 1
+
+# two:
+#   internal_name: MyString
+#   descriptor: MyString
+#   question_type_id: 1

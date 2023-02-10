@@ -1,0 +1,30 @@
+<%# Renders the feedback form as an actual completable form, for use in
+both previews and completion depending information about the current
+assigned copy has been passed in from the controller %>
+<%# Parent element %>
+<div id="formContainer">
+<%# Include JS files containing classes for managing form data and 
+rendering editor interface %>
+<%= javascript_include_tag 'custom/feedback_forms' %>
+<%= javascript_include_tag 'custom/feedback_form_views' %>
+<script>
+  // The JS doesn't get run properly when initially accessing the page from
+  // a hyperlink for some reason. I'm probably using the asset pipeline wrong
+  // but this is an easier fix
+  try {
+    // pass JSON representation of form info into JS class object
+    // need to do some escaping as quotation and newlines otherwise cause errors
+    let formJSON = JSON.parse((`<%= raw escape_characters_in_string(@form_details.to_json) %>`));
+    let form = new FeedbackForm(formJSON);
+
+    // render interface
+    let formView = new FeedbackFormView(form, document.getElementById("formContainer"), "<%= @assignment_id %>", "<%= @presenter_name %>")
+    formView.render();
+  } catch (error) {
+    location.reload();
+  }
+</script>
+
+<% if Rails.env.development? %>
+  <%= debug(@assignment_id) %>
+<% end %>

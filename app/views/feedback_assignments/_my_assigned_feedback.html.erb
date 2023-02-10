@@ -1,0 +1,16 @@
+<%# For viewing own assigned feedback, show as flat list with presenter
+and form listed in each entry %>
+<ul class="list-group">
+  <% FeedbackAssignment.select{|a| a.evaluator == current_user}.each do |assignment| %>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-sm-10">
+          <p>Complete <strong><%= assignment.form.title %></strong> for <strong><%= assignment.presentation.name %></strong> (<%= presenter_names(assignment.presentation) %>)</p>
+        </div>
+        <div class="col-sm-2">
+          <p><%= (@response_submitted[assignment.id] ? "Submitted" : link_to("Start", new_feedback_response_path(assignment_id: assignment.id), class: "btn btn-primary btn-large")) %></p>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>

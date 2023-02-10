@@ -1,0 +1,20 @@
+<% provide(:title, "Log In") %>
+<div class="jumbotron">
+<h1>Log In</h1>
+
+  <div class="signup">
+    <%= form_with(url: login_path, scope: :session) do |f| %>
+
+    <%= f.label :email %>
+    <%= f.email_field :email, style: "display: block" %>
+
+    <%= f.label :password %>
+    <%= f.password_field :password, style: "display: block" %>
+
+    <%= f.submit "Sign In", class: "btn btn-primary" %>
+  <% end %>
+
+  <br>
+  <p>New user? <%= link_to "Sign Up", signup_path %></p>
+ </div>
+</div>

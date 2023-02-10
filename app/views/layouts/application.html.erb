@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:title)) %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <%= render 'layouts/rails_default' %>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <%= render 'layouts/header' %>
+    <% flash.each do |message_type, message| %>
+      <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+    <% end %>
+    <div class="container">
+      <%= yield %>
+    </div>
+    <%= render 'layouts/footer' %>
+    <% if Rails.env.development? %>
+      <%# debug(params) %>
+    <% end %>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+<li>
+     <p>
+      <%= link_to user.name, user %>
+      <% if user.admin? %>
+      - Teacher
+      <% else %>
+      - Student
+      <% end %>   
+     </p>
+    </li>

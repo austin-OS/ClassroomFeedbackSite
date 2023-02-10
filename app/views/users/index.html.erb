@@ -1,0 +1,22 @@
+<% provide(:title, "Users")%>
+<p style="color: green"><%= notice %></p>
+
+<div class="jumbotron">
+<h1>All Students</h1>
+
+<%= will_paginate %>
+<% if current_user.admin? %>
+<div class="float-right">
+<%= link_to "Add a Student", signup_path, class: "btn btn-lg btn-success" %>
+</div>
+<br>
+<% end %>
+<ul class="users">
+  <% @users.each do |user| %>
+    <%= render user %>
+  <% end %>
+</ul>
+
+<%= will_paginate %>
+
+</div>

@@ -1,0 +1,333 @@
+<% provide(:title, "About") %>
+
+<div class="container jumbotron about">
+
+    <h1 id="welcome-to-feedbacker">Welcome to FeedBackEr!</h1>
+
+<p>FeedBackEr is a presentation feedback web application created using the Ruby on Rails framework.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2><hr>
+<ol>
+  <li><a href="#overview">Overview</a>
+    <ol>
+      <li><a href="#feedbacker">FeedBackEr</a></li>
+      <li><a href="#included-features">Included Features</a></li>
+      <li><a href="#possible-improvements">Possible Improvements</a></li>
+      <li><a href="#technologies-used">Technologies Used</a></li>
+    </ol>
+  </li>
+  <li><a href="#instructor-guide">Instructor Guide</a>
+    <ol>
+      <li><a href="#preparing-rails-and-starting-the-server">Preparing Rails</a></li>
+      <li><a href="#creating-presentations">Creating Presentations</a></li>
+      <li><a href="#assigning-feedback">Assigning Feedback</a></li>
+      <li><a href="#instructor-features">Instructor Features</a></li>
+    </ol>
+  </li>
+  <li><a href="#student-guide">Student Guide</a>
+    <ol>
+      <li><a href="#registering-account">Registering Account</a></li>
+      <li><a href="#viewing-feedback">Viewing Feedback</a></li>
+      <li><a href="#giving-feedback">Giving Feedback</a></li>
+    </ol>
+  </li>
+  <li><a href="#code-guide">Code Guide</a>
+    <ol>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#views">Views</a></li>
+      <li><a href="#controllers">Controllers</a>
+        <ul>
+          <li><a href="#developer-controller-contribution">Developer Controller Contribution</a></li>
+        </ul>
+      </li>
+      <li><a href="#database">Database</a></li>
+      <li><a href="#test-suites">Test Suites</a></li>
+      <li><a href="#documentation-and-style">Documentation and Style</a></li>
+    </ol>
+  </li>
+  <li><a href="#credits">Credits</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2><hr>
+
+<h3 id="feedbacker">FeedBackEr</h3>
+
+<p>FeedBackEr is a web application used to allow students to provide feedback on other students presentations. As an instructor, it can serve as a tool to manage student presentations and the associated grades. FeedBackEr gives students the opportunity to give and recieve peer feedback, which is a valuable tool among students, our future teachers and leaders.</p>
+
+<h3 id="included-features">Included Features</h3>
+
+<p>FeedBackEr has a variety of features currently implemented in our beta version meant to enhance the peer feedback process. These features are as follws:</p>
+
+<h4 id="customizable-feedback-forms">Customizable Feedback Forms</h4>
+
+<p>Presentations vary greatly between presenters, topic, and assignment. Due to this fact, we aim to provide the most customizable feedback options. Each presentation has it's own feedback form for assigned students to fill out, which can be customized greatly using the feedback form creator <strong>ADD MORE AS IMPLEMENTED</strong></p>
+
+<h4 id="authenticated-accounts">Authenticated Accounts</h4>
+
+<p>While many of these presentations may be public, students may not always want their feedback broadcast to the world, especially the critical reviews. That is why each instructor and student has their own account, allowing them access to certain pages and features, and only showing them what is relevant to that user.</p>
+
+<p>Students and instructors have their own interfaces, giving them easy access to the FeedBackEr features they have access to. While students can only see what is relevant to them, such as their presentations and assigned feedback, instructors have access to all presentations and feedback assignments, as well as the ability to assign them.</p>
+
+<p>Each account uses a unique email (perferably student or organization emails) as their user identifier when logging in, as well as a secure password that is stored as a digest (using <a href="#technologies-used">BCrypt</a>) in our database. These helps keep your FeedBackEr and other accounts safe as a breach in our database will not lead to leaked passwords.</p>
+
+<h4 id="paged-roster-and-user-management">Paged Roster and User Management</h4>
+
+<p>Registered users have access to the <strong>users</strong> page, which lists all of the registered users on the site. This roster automatically split into pages of 30 users, which can be naviated using the page navigation menu under the <em>Class Roster</em> header.</p>
+
+<p><img src="https://cdn.discordapp.com/attachments/776139977649684522/1047907169288327249/Screenshot_2022-12-01_at_11.08.30_AM.png" alt="Class Roster Page" /></p>
+
+<p>As an admin, you have the ability to have students drop the class and promote your newly registered instructors to their admin roles on the site. You can perform these actions by clicking on the name of a specific user and then clicking one of the "admin tools" buttons, "Drop Student" or "Promote to Instructor".</p>
+
+<p><img src="https://cdn.discordapp.com/attachments/776139977649684522/1047908076252037140/Screenshot_2022-12-01_at_11.12.26_AM.png" alt="Account Page Admin View" /></p>
+
+<h3 id="possible-improvements">Possible Improvements</h3>
+
+<h4 id="student-groups">Student Groups</h4>
+
+<p>Presentations are often given as groups, and more often than not, these same groups give multiple presentations throughout the duration of a course. While FeedBackEr currently has support for adding multiple student presenters to a presentation, there is not a way to set up groups of students that can be easily selected when creating a new presentation. Adding presentation groups could make creating new presentation and assigning feedback quicker and easier for instructors. Not only would these presentation groups make assigning presenters easier, but they could be used to assign feedback to select groups of students in just a few clicks!</p>
+
+<h4 id="multiple-course-support">Multiple Course Support</h4>
+
+<p>FeedBackEr currently is a single course section implementation, as such, each section requires it's own running instance of FeedBackEr. As instructors often teach more than one section, and students are often taking more than one course, support for more than one course/section is be a <em>necessary</em> feature to add as FeedBackEr is developed.</p>
+
+<h4 id="password-requirements">Password Requirements</h4>
+
+<p>There is currently only one requirement for a user password: it must be at least 6 characters. This is not very secure, and can lead to users having easily accessible passwords (think 'abc123', '123456', 'zxcvbn') that can be guessed with enough tries (see <a href="#locked-accounts">locked accounts</a>). Requiring the use of special characters, capital letters, and numbers makes the list of possible simple passwords much larger.</p>
+
+<h4 id="locked-accounts">Locked Accounts</h4>
+
+<p>While it is highly suggested that you use strong passwords, whether through a generator or the use of numbers, special characters, and different cases, it is unavoidable that some users will use simple passwords that can be guessed with a certain number of attempts. Adding a limit of how many sign in attempts can be made from a certain ip address in a period of time prevents this.</p>
+
+<h4 id="password-recovery">Password Recovery</h4>
+
+<p>Everyone forgets their password every now and then.</p>
+
+<p>There are a few different ways FeedBackEr could implement password recovery, including:</p>
+
+<ul>
+  <li>Email Based Password Reset:
+An email sent to a user contains a link to reset their password</li>
+  <li>Password Recovery Codes:
+A user has a set of recovery codes they are told to write down, these can allow you into your account to change your password</li>
+  <li>Temporary Password:
+An email sent to a user contains a temporary password, thus you can access your account and change your password</li>
+</ul>
+
+<h3 id="technologies-used">Technologies Used</h3>
+
+<p>The <a href="https://rubyonrails.org">Ruby on Rails</a> framework (version 7.0.4) was used to develop FeedBackEr.</p>
+
+<p>Within the Rails framework, embedded Ruby files (erb) were used to create the views and <a href="https://www.ruby-lang.org/en/">Ruby</a> (version 3.1.2) was used for the controller, model, and testing code. <a href="https://sass-lang.com">SASS</a> and <a href="https://getbootstrap.com/docs/3.3/">Bootstrap 3</a> were used for styling. A small amount of Javascript using <a href="https://jquery.com">jQuery</a> was also used for the dropdown navigation menu.</p>
+
+<p>Ruby allows for easy use of <a href="https://rubygems.org">Ruby Gems</a> through <a href="https://bundler.io">Bundler</a>.
+FeedBackEr utilizes the following gems:</p>
+
+<h4 id="general">General:</h4>
+<ul>
+  <li>rails (v 7.0.4)</li>
+  <li>sprockets-rails</li>
+  <li>sqlite3 (v 1.4)</li>
+  <li>puma (v 5.0)</li>
+  <li>importmap-rails</li>
+  <li>turbo-rails</li>
+  <li>stimulus-rails</li>
+  <li>jbuilder</li>
+  <li>boostrap-sass (v 3.4.1)</li>
+  <li>bcrypt (v 3.1.7)</li>
+  <li>tzinfo-data</li>
+  <li>bootsnap</li>
+  <li>sassc-rails</li>
+  <li>faker</li>
+  <li>redcarpet</li>
+</ul>
+
+<h4 id="for-development">For Development:</h4>
+<ul>
+  <li>debug</li>
+  <li>web-console</li>
+</ul>
+
+<h4 id="for-testing">For Testing:</h4>
+<ul>
+  <li>capybara (v 3.37.1)</li>
+  <li>guard (v 2.18.0)</li>
+  <li>guard-minitest (v 2.4.6)</li>
+  <li>minitest (v 5.15.0)</li>
+  <li>minitest-reporters (v 1.5.0)</li>
+  <li>rails-controller-testing (v 1.0.5)</li>
+  <li>selenium-webdriver (v 4.2.0)</li>
+  <li>webdrivers (v 5.0.0)</li>
+</ul>
+
+<h2 id="instructor-guide">Instructor Guide</h2><hr>
+
+<h3 id="preparing-rails-and-starting-the-server">Preparing Rails and Starting the Server</h3>
+
+<p>This guide assumes that you have already set up the following technologies. If you have not, please follow the links to intall them.</p>
+
+<ul>
+  <li><a href="https://www.ruby-lang.org/en/downloads/">Ruby 3.1.2</a></li>
+  <li><a href="https://guides.rubyonrails.org/v5.0/getting_started.html">Rails 7.0.4</a></li>
+</ul>
+
+<p>The first step in setting up your FeedBackEr site is downloading the project from <a href="https://github.com/cse3901-2022au-giles/team4-presentation-feedback-site">Github</a>. This contains everything you will need to get started with FeedBackEr!</p>
+
+<p>In your terminal, navigate the the FeedBackeEr directory. While in this directory, you must first install the gems listed in the <a href="#technologies-used">technologies used</a> section. Bundler makes this extremely easy using the <strong>Gemfile</strong>. All you need to do is run the following command:
+<code>
+bundle install
+</code>
+Now that all of the gems have been installed, you must migrate the database in preperation for the site to be launched. You can do this with the command:
+<code>
+rake db:create db:migrate
+</code>
+If you would like to seed the database for testing purposes, use:
+<code>
+rake db:seed
+</code>
+This will provide you with one admin login with email: "admin@email.com" and password: "adminpass22", and many randomly generated student users.</p>
+
+<p>After these commands, you should be able to launch your FeedBackEr server with:
+<code>
+rails server
+</code>
+This should provide you with a web address listed after "Listening on". Copy this address and paste it into the browser of your choice. This should take you to the FeedBackEr home page!</p>
+
+<h3 id="creating-presentations">Creating Presentations</h3>
+
+<p>As an instructor (with a seeded database, use email: "admin@email.com" password: "adminpass22"), click on the presentations link on the top navigation bar. This will take you to an index of all of the presentations on the site. Keep in mind, when a student accesses the presentations page, it will only show their presentations. On the presentations page, you should see a "New Presentation" button. When you click on this button, it will take you to the create presentation page.</p>
+
+<p>On the create presentation page, type out the name of the presentation and the date it was given. This is the main identifying information that the presentation has. There will also be a selection box listing all of the users on the side. This is where you select the students who gave this presentation. You can select one student by clicking on their name, which will be highlighted blue. You can select multiple students by holding control (or command on mac) when you click student names.</p>
+
+<p>After you select all of the students who presented, click on the "Create Presentation" button to add this presentation to the site. It should then take you to the presentations index page where the new presentation is displayed!</p>
+
+<p><img src="https://cdn.discordapp.com/attachments/776139977649684522/1047886290076577883/Screenshot_2022-12-01_at_9.45.48_AM.png" alt="Create Presentation Page" /></p>
+
+<h3 id="assigning-feedback">Assigning Feedback</h3>
+
+<h3 id="instructor-features">Instructor Features</h3>
+
+<p>Instructors have access to all of the information on the website (excluding user passwords). Through the user page you can view all of the site's users, make newly registered users into instructors, and drop students from your class (deleting the user account). From the presentations page you can view all the created presentations and their presenters. By clicking on a presentation you can view all of the feedback given and by whom.</p>
+
+<h2 id="student-guide">Student Guide</h2><hr>
+
+<h3 id="registering-account">Registering Account</h3>
+
+<p>When you first access the FeedBackEr site, you will first need to create your account. On the FeedBackEr home page, there is a big blue button that says "Sign Up!". This will take you to a sign up page where you will enter your name, email, and a secure password. After you enter information for all of those fields, just hit "Create Account" and you are all registered. Once you are registered, the next step is for you to wait until 1) your instructor assigns you feedback or 2) one of your presentations receives feedback.</p>
+
+<p><img src="https://cdn.discordapp.com/attachments/776139977649684522/1047885204414550047/Screenshot_2022-12-01_at_9.41.07_AM.png" alt="log in screen" /></p>
+
+<h3 id="viewing-feedback">Viewing Feedback</h3>
+
+<p>You can access the feedback you receive from your peers on the <strong>presentations</strong> page. Here you will be able to view all the presentations that you, or a group you were in, have given. When you click to view a specific presentation, the feedback provided by your peers will be listed on the page for you to view!</p>
+
+<h3 id="giving-feedback">Giving Feedback</h3>
+
+<h2 id="code-guide">Code Guide</h2><hr>
+
+<h3 id="models">Models</h3>
+
+<p>This project uses a variety of models to store and associate the users, presentations, and feedback on the site. The models are described below:</p>
+
+<h4 id="users">Users</h4>
+
+<p>The user model is located in the <strong>app/models/user.rb</strong> file. The user model provides validations for valid names (must be present), emails (must be unique, present, and follow an email REGEX), and passwords (must be present and at least 6 characters long). The user model also provides the association between users and presentation as a many to many association, meaning each user can have many presentations, and each presentation can have many users. The user model also contains a method to provide a password digest for a given string, which is used for testing.</p>
+
+<h4 id="presentations">Presentations</h4>
+
+<p>The presentations model is located in the <strong>app/models/presentation.rb</strong> file. The presentation model validates that each presentation, a name and date are present. It also provides the aformentioned association between presentations and users, which is a many to many association.</p>
+
+<h4 id="feedback">Feedback</h4>
+
+<h3 id="views">Views</h3>
+
+<h4 id="info">Info</h4>
+
+<p>The info views are located in the <strong>app/views/info</strong> directory and contains the files <strong>about.html.erb</strong> and <strong>contact.html.erb</strong>. These are static pages that contain information about FeedBackEr (including this about page!). This README also serves as the about page, and the contact page contains a link to each of teh developers' github pages.</p>
+
+<h4 id="layouts">Layouts</h4>
+
+<p>The layouts are located in the <strong>app/views/layouts</strong> directory and contains the files <strong>_footer.html.erb</strong>, <strong>_forbidden.html.erb</strong>, <strong>_header.html.erb</strong>, <strong>_rails_default.html.erb</strong>, <strong>application.html.erb</strong>, <strong>mailer.html.erb</strong>, and <strong>mailer.text.erb</strong>. The files that lead with an underscore are <em>partials</em> that are commonly rendered throughout the site. Most of them are self explanatory. <strong>_header.html.erb</strong> provides the html for the navigation bar and the <strong>_footer.html.erb</strong> for the footer. <strong>_forbidden.html.erb</strong> is used when a student attempts to access an instructors only page, the create presentation page for example. <strong>_rails_default.html.erb</strong> is used to provide the HTML header with the default rails information.</p>
+
+<p>The <strong>application.html.erb</strong> is the site layout, which renders html for each page, including the navigation bar and footer, as well as other standard information, and uses the erb <strong>&lt;% yield %&gt;</strong> to render the page currently being accessed.</p>
+
+<p><strong>mailer.html.erb</strong>, and <strong>mailer.text.erb</strong> are automatically generated by rails and are not used by FeedBackEr.</p>
+
+<h4 id="presentations-1">Presentations</h4>
+
+<p>The presentation views are located in the <strong>app/views/presentations</strong> directory and contains a variety of files for each of the presentation pages. These pages include the index of presentations, the create presentation page, the edit presentation page, and the page for each individual presentations information and feedback. The <strong>new.html.erb</strong> and <strong>edit.html.erb</strong> use the <strong>_form.html.erb</strong> partial to render a form that allows for the information of a presentation to be entered.</p>
+
+<h4 id="sessions">Sessions</h4>
+
+<p>The only view for sessions is the view for the log in page, which is located in the file <strong>app/views/sessions/new.html.erb</strong>. This generates a form for a user to enter their email and password, which is then sent to the sessions controller to autenticate the user.</p>
+
+<h4 id="site">Site</h4>
+
+<p>The only view in the site category is the home page, found in <strong>app/views/site/home.html.erb</strong>. This renders the different home pages for a non-logged in user, a student user, and an instructor user.</p>
+
+<h4 id="users-1">Users</h4>
+
+<p>The user views follow a very similar format to the presentation views. Located in the <strong>app/views/users</strong> directory, there are views for the indexing, creation, viewing, and editing of users.</p>
+
+<h3 id="controllers">Controllers</h3>
+
+<h4 id="static-pages-info-and-site">Static Pages (Info and Site)</h4>
+
+<p>The info and site controllers are located in <strong>app/controllers/info_controller.rb</strong> and <strong>app/controllers/site_controller.rb</strong> respectively. These controllers only contain methods to render their associated views.</p>
+
+<h4 id="users-2">Users</h4>
+
+<p>The users controller, found in <strong>app/controllers/users_controller.rb</strong>, handles the creation and editing of users when receiving the form data from the new users page view, as well as indexing and showing specific users. The users controller also contains methods for determining if a user is logged in and whether the logged in user is an admin.</p>
+
+<h4 id="presentations-2">Presentations</h4>
+
+<p>The presentations controller, found in <strong>app/controllers/presentations_controller.rb</strong>, has a very similar structure to the users controller, and has many of the same methods for creating, editing, and viewing presentations. The create function also includes a section that associates all of the presenting users with the specific presentation being created or edited.</p>
+
+<h4 id="sessions-1">Sessions</h4>
+
+<p>The sessions controller, found in <strong>app/controllers/sessions_controller.rb</strong>, includes create and destroy methods for creating a new user session. The create method allows an authenticated user to log in to the site by receiving form information from the <strong>app/views/sessions/new.html.erb</strong> view. The destroy method logs a user out of the site.</p>
+
+<h4 id="developer-controller-contribution">Developer Controller Contribution</h4>
+
+<p>Canaan Porter: Generated presentations and users controllers. Modified presentations controller to add user associations to presentation upon creation and editing. Created the sessions controller. Created make_admin controller action in the users controller to promote users to instructor.</p>
+
+<h3 id="database">Database</h3>
+
+<h4 id="schema">Schema</h4>
+
+<p>The <strong>db/schema.rb</strong> file contains all the final database tables created through migrations generated throughout the development of FeedBackEr. These migrations can be viewed in the <strong>db/migrate</strong> directory.</p>
+
+<h4 id="seeds">Seeds</h4>
+
+<p>The <strong>db/seeds.rb</strong> and <strong>db/seeds0.rb</strong> files are used to fill the database with users to test the site during development. This currently generates one admin user and 99 test student users with random names and emails (using <a href="https://github.com/faker-ruby/faker">faker</a>). When ready for production, the <strong>seeds.rb</strong> file will generate only an admin user for inital login, then this admin can promote other users to admin (instructor) status.</p>
+
+<h3 id="test-suites">Test Suites</h3>
+
+<p>The automated test suites for this project are located in the <strong>test</strong> directory. This includes tests for the controllers and models, that can be run using:
+<code>
+rails test
+</code></p>
+
+<h3 id="documentation-and-style">Documentation and Style</h3>
+
+<p>At the top of each model file there is a comment block that describes the model, including all of the different table columns and associations.</p>
+
+<p>This project follows the Rubocop style guide for programming in Ruby, assisted by the Rubocop gem to make any corrections to style.</p>
+
+<h2 id="credits">Credits</h2><hr>
+
+<h2>This project was developed by</h2><hr>
+<ul>
+<strong><li><a href="https://github.com/li11315-osu">Thomas Li</a></li></strong>
+<strong><li><a href="https://github.com/CPort28">Canaan Porter</a></li></strong>
+<strong><li><a href="https://github.com/austin-OS">Austin Greer</a></li></strong>
+<strong><li><a href="https://github.com/ai003">Alvin Ishimwe</a></li></strong></ul>
+
+<h2 id="references">References</h2><hr>
+<ul>
+  <li><a href="https://www.railstutorial.org/book">Ruby On Rails Tutorial</a></li>
+  <li><a href="https://guides.rubyonrails.org">Rails Guides</a></li>
+  <li><a href="https://getbootstrap.com/docs/3.3/">Bootstrap 3</a></li>
+</ul>
+
+</div>

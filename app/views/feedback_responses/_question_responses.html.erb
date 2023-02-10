@@ -1,0 +1,42 @@
+<%# For the given question, figure out which responses if any the user can
+see, and then display them in a list group. For quantitative questions, also
+render low/high/mean/median%>
+
+<%# locals: presentation (ActiveModel record), question (ActiveModel record) %>
+
+<%# get visible responses %>
+<% visible_responses = filter_responses(presentation, question).filter {|v| !v.nil? } %>
+<% anonymized =  responses_anonymized?(presentation, question) %>
+
+<ul class="list-group">
+    <% if visible_responses.length > 0 %>
+        <% if question.type.quantitative %>
+            <% quantitative_response_values = visible_responses.map {|r| r.value.to_i} %>
+            <%# I know the median calculation is wrong, I was in a hurry to get this in%>
+            <% analytics = {"Average": quantitative_response_values.sum / quantitative_response_values.length.to_f,
+                            "Median": quantitative_response_values.sort!()[quantitative_response_values.length / 2],
+                            "Low": quantitative_response_values[0],
+                            "High": quantitative_response_values[-1]} %>
+            <li class="list-group-item row">
+                <% analytics.each_key do |k| %>
+                    <div class="col-sm-6 col-md-3">
+                        <p> <strong> <%= k %>: </strong> <%= analytics[k] %> </p>
+                    </div>
+                <% end %>
+            </li>
+        <% end %>
+        <%# list each respondent (if not anonymized) and response value %>
+        <% visible_responses.shuffle.each do |r|%>
+            <li class="list-group-item row">
+                <div class="col-sm-4">
+                    <p><strong><%= (anonymized ? "(Anonymous)" : r.assigned_copy.evaluator.name ) %></strong> posted: </p>
+                </div>
+                <div class="col-sm-8">
+                    <p><%= r.value %></p>
+                </div>
+            </li>
+        <% end %>
+    <% else %>
+        <p> (No responses visible) </p>
+    <% end %>
+</ul>

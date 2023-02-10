@@ -1,0 +1,42 @@
+<% provide(:title, "Home") %>
+
+<div class="center jumbotron bg-primary">
+  <% if !logged_in? %>
+    <h1>Welcome to FeedBackEr<h1>
+    
+    <%# probably change, just a stock photo for filler right now%>
+    <%= image_tag("home-photo.jpg", alt: "A woman presenting", width: "60%") %>
+
+    <h2>FeedBackEr provides a quick and easy interface for giving, viewing, and managing feedback on your classes presentations.</h2>
+    <h2>Read more about the features that FeedBackEr provides on the <%= link_to "about", about_path %> page,
+    or get in <%= link_to "contact", contact_path %> with us!</h2>
+
+    <p>Ready to join your class?</p>
+    <%= link_to "Sign Up!", signup_path, class: "btn btn-lg btn-primary" %>
+  <% elsif current_user.admin? %>
+    <h1>Welcome back, <%= current_user.name %></h1>
+
+    <br>
+    <div class="ql">
+    <h2>Quick Links:</h2>
+    <ul class="users">
+      <li><%= link_to "Create A Presentation", new_presentation_path %></li>
+      <li><%= link_to "Class Roster", users_path %></li>
+      <li><%= link_to "About FeedBackEr", about_path %></li>
+    </ul>
+    </div>
+
+  <% else %>
+    <h1>Welcome back, <%= current_user.name %></h1>
+    <br>
+    <div class="ql">
+    <h2>Quick Links:</h2>
+    <ul class="users">
+      <li><%= link_to "View your Presentations", presentations_path %></li>
+      <li><%= link_to "Your Assigned Feedback", feedback_assignments_path %></li>
+      <li><%= link_to "About FeedBackEr", about_path %></li>
+    </ul>
+    </div>
+    <% end %>
+</div>
+

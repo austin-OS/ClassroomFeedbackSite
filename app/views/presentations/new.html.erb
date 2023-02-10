@@ -1,0 +1,23 @@
+
+<%# Instructor Only Page %>
+<% if logged_in? && current_user.admin? %>
+
+  <% provide(:title, "New Presentation")%>
+
+  <h1>New presentation</h1>
+
+  <%= render "form", presentation: @presentation %>
+
+  <br>
+
+  <div>
+    <%= link_to "Back to presentations", presentations_path, class: "btn btn-primary" %>
+  </div>
+
+<%# Showing forbidden if student tries to access %>
+<% else %> 
+  <%= render 'layouts/forbidden' %>
+<% end %>
+
+
+

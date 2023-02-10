@@ -1,0 +1,33 @@
+<% provide(:title, "All Forms") %>
+<h1> Feedback Forms </h1>
+<hr>
+<%= link_to "Create New Form", new_feedback_form_path, class: "btn btn-success btn-large" %>
+<hr>
+<div class = "container">
+  <% @feedback_forms.each do |form| %>
+    <div class="row">
+
+      <div class="col-sm-8">
+        <%= form.title %>
+      </div>
+
+      <div class="col-sm-1">
+        <%= link_to "Preview", form, class: "btn btn-secondary btn-sm" %>
+      </div>
+      <div class="col-sm-1">
+        <%= link_to "Edit", edit_feedback_form_path(form), class: "btn btn-primary btn-sm" %>
+      </div>
+
+      <div class="col-sm-1">
+        <%= link_to "Copy", new_feedback_form_path(id: form.id), class: "btn btn-light btn-sm" %>
+      </div>
+      <div class="col-sm-1">
+        <%= button_to "Delete", form, method: :delete, class: "btn btn-danger btn-sm" %>
+      </div>
+    </div>
+    <hr>
+  <% end %>
+</div>
+<% if Rails.env.development? %>
+  <%# debug(@feedback_forms_json) %>
+<% end %>

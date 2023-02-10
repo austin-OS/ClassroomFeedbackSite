@@ -1,0 +1,21 @@
+
+<div id="presentations" class="jumbotron display-table">
+  <table>
+  <%= render @presentation %>
+  <td>
+  <ul>
+    <% @presentation.attached_forms.uniq.each do |form| %>
+      <li><%= link_to form.title, feedback_responses_path(form_id: form.id, presentation_id: @presentation.id) %></li>
+    <% end %>
+  </ul>
+  </td>
+  <% if logged_in? && current_user.admin? %>
+    <td>
+    <%= button_to "Delete", @presentation, method: :delete %></td>
+  <% end %>
+  </table>
+  <br>
+  <div>
+    <%= link_to "Back to presentations", presentations_path, class: "btn btn-primary" %>
+  </div>
+</div>

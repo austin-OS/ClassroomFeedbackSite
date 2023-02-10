@@ -1,0 +1,5 @@
+<% provide(:title, "Edit Form") %>
+<%= render 'form_editor' %>
+<% if Rails.env.development? %>
+  <%# debug(@form_details_json) %>
+<% end %>

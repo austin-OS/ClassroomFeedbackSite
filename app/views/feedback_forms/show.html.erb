@@ -1,0 +1,5 @@
+<% provide(:title, "Preview Form") %>
+<%= render '/shared/feedback_form_interface' %>
+<% if Rails.env.development? %>
+  <%# debug(@form_details_json) %>
+<% end %>

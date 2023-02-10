@@ -1,0 +1,63 @@
+<% provide(:title, "View Assigned Feedback") %>
+
+<h1> Assigned Feedback </h1>
+<hr>
+
+<%# Admin has buttons to assign more feedback and views all users' forms %>
+<%#%>
+<% if current_user.admin %>
+  <%= link_to "Create Assignments", new_feedback_assignment_path, class: "btn btn-success btn-large" %>
+  <hr>
+  <%# List by form, then by question, then by evaluator %>
+  <ul class="list-group">
+    <%# First list own assigned feedback %>
+    <li class="list-group-item">
+      <p><strong>My Assigned Feedback</strong></p>
+      <%= render "my_assigned_feedback" %>
+    </li>
+    <% FeedbackForm.all.each do |form| %>
+      <li class="list-group-item">
+        <p> Assigned to <strong><%= form.title %></strong>: </p>
+        <%= link_to "View All Responses", feedback_responses_path(form_id: form.id), class: "btn btn-primary" %>
+        <%= link_to "Assign More", new_feedback_assignment_path(form_id: form.id), class: "btn btn-success" %>
+        <%#= link_to "Clear Assignments", feedback_assignment_path(form_id: form.id), class: "btn btn-danger btn-large" %>
+        <ul class="list-group">
+          <% Presentation.select {|p| p.attached_forms.include? form}.each do |presentation| %>
+            <li class="list-group-item">
+              <p> Evaluating <strong><%= presentation.name %></strong> (by <%= presenter_names(presentation) %>): </p>
+              <%= link_to "View Responses", feedback_responses_path(form_id: form.id, presentation_id: presentation.id), class: "btn btn-primary btn-sm" %>
+              <%= link_to "Assign More", new_feedback_assignment_path(form_id: form.id, presentation_id: presentation.id), class: "btn btn-success btn-sm" %>
+              <ul class="list-group">
+                <% FeedbackAssignment.select {|a| a.form == form && a.presentation == presentation}.each do |assignment| %>
+                <% if !assignment.evaluator.nil? %>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <p><strong><%= assignment.evaluator.name %></strong></p>
+                      </div>
+                      <div class="col-sm-3">
+                        <p><%= (@response_submitted[assignment.id] ? "Response Submitted" : "Not Submitted Yet") %></p>
+                      </div>
+                      <% unless @response_submitted[assignment.id] %>
+                        <div class="col-sm-2">
+                          <%= button_to "Unassign", assignment, method: :delete, class: "btn btn-danger btn-sm" %>
+                        </div>
+                      <% end %>
+                    </div>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <%= render "my_assigned_feedback" %>
+<% end %>
+
+<% if Rails.env.development? %>
+  <%# debug(@feedback_assignments.to_json) %>
+<% end %>

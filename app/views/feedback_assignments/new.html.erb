@@ -1,0 +1,70 @@
+<% provide(:title, "Assign Feedback") %>
+<h1> Assign Feedback </h1>
+<hr>
+<form action="<%= feedback_assignments_path %>" method="post" class=>
+  <%# Select form to assign %>
+  <label class="form-label">
+    Which form to use?
+  </label>
+  <select class="form-select" name="form_id" required>
+    <option value = "" disabled selected> Select One </option>
+    <% FeedbackForm.all.each do |form| %>
+      <option value="<%= form.id %>" 
+              <%= (@selected_form_id.to_i == form.id ? "selected" : "") %>>
+        <%= form.title %>
+      </option>
+    <% end %>
+  </select>
+  <%# Select presentation to assign to %>
+  <label class="form-label">
+    Which presentation to evaluate?
+  </label>
+  <select class="form-select" name="presentation_id" required>
+    <option value = "" disabled selected> Select One </option>
+    <% Presentation.all.each do |presentation| %>
+      <option value="<%= presentation.id %>" 
+              <%= (@selected_presentation_id.to_i == presentation.id ? "selected" : "") %>>
+        <%= presentation.name %> (<%= presenter_names(presentation) %>)
+      </option>
+    <% end %>
+  </select>
+  <%# Specify which users to assign to %>
+  <label class="form-label">
+    Which users will be doing the evaluations?
+  </label>
+  <select class="form-select" name="assignment_option" id="assignmentOptionSelector" required>
+    <option value="" disabled selected> Select One </option>
+    <option value="peers"> Peers </option>
+    <option value="presenters"> Presenters (Self-Evaluation) </option>
+    <option value="instructors"> Instructors </option>
+    <option value="everyone"> Everyone </option>
+    <option value="custom"> Select Specific User </option>
+  </select>
+  <select class="form-select" name="user_id" id="userSelector" hidden>
+    <option value = "" disabled selected> Select One </option>
+    <% User.all.each do |user| %>
+      <option value="<%= user.id %>">
+        <%= user.name %>
+      </option>
+    <% end %>
+  </select>
+  <%# Submit%>
+  <button class="btn btn-success" type="submit">Assign</button>
+</form>
+<%# Cancel %>
+<%= link_to "Cancel", "javascript:history.back()", class: "btn btn-danger btn-large" %>
+
+
+
+<script>
+  // Small amount of dynamic client-side code to hide/unhide selector for
+  // specific user
+  try {
+    let assignmentOptionSelector = document.getElementById("assignmentOptionSelector");
+    assignmentOptionSelector.addEventListener("input", () => {
+      document.getElementById("userSelector").hidden = assignmentOptionSelector.options[assignmentOptionSelector.selectedIndex].value != "custom";
+    });
+  } catch(error) {
+    location.reload();
+  }
+</script>

@@ -1,0 +1,37 @@
+<% provide(:title, @user.name)%>
+
+<p style="color: green"><%= notice %></p>
+
+<div class="jumbotron">
+<% provide(:title, @user.name) %>
+<h1>
+  Account Info
+</h1>
+  <br>
+  <h3>Name: <%= @user.name %></h3>
+  <br>
+  <h3>Email: <%= @user.email %></h3>
+  <br>
+  <h3>Account Type: 
+  <% if @user.admin? %> 
+  Instructor
+  <% else %>
+  Student
+  <% end %>
+  </h3>
+  <br>
+  <h3>User ID: <%= @user.id %></h3>
+  <% if current_user.admin? && !current_user?(@user) && !@user.admin? %>
+
+  <br>
+  <h2 class="float-right">Admin Options</h2>
+  <br>
+  <div class="user-buttons">
+  <ul class="inline">
+    <li><%= button_to "Drop Student", @user, method: :delete,
+                              data: { confirm: "Delete the account?" }, class: "btn btn-danger" %></li>
+    <li><%= button_to "Promote To Instructor", {action: "make_admin" }, method: :put, class: "btn btn-primary" %></li>
+  </ul>
+  </div>
+<% end %>
+</div>

@@ -1,0 +1,44 @@
+<%= form_with(model: user) do |form| %>
+  <div class="signup">
+    <% if user.errors.any? %>
+      <div class="alert alert-danger">
+        <ul>
+          <% user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name %>
+    </div>
+
+    <div>
+      <%= form.label :email, style: "display: block" %>
+      <%= form.text_field :email %>
+    </div>
+
+    <div id="password-form">
+      <div>
+        <%= form.label :password, style: "display: block" %>
+        <%= form.password_field :password %>
+      </div>
+
+      <div>
+        <%= form.label :confirm_password, "Confirm Password", style: "display: block"%>
+        <%= form.password_field :password_confirmation %>
+      </div>
+
+      <div>
+        <%= form.submit "Create Account", class: "btn btn-primary btn-large" %>
+      </div>
+    </div>
+    <br>
+    <% if !logged_in? %>
+    <p>Already have an account? <%= link_to "Log In", login_path %></p>
+    <% end %>
+  </div>
+  
+<% end %> 

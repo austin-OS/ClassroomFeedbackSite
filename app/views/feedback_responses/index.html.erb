@@ -1,0 +1,33 @@
+<% provide(:title, "View Responses") %>
+
+<h1> Responses to <%= @form.title %> </h1>
+<% if @presentation %>
+    <h1> <%="For #{@presentation.name} by #{presenter_names(@presentation)}"%> </h1>
+<% end %>
+
+<%# List one question at a time %>
+<ul class="list-group">
+    <% @form.questions.each do |question| %>
+        <li class="list-group-item">
+            <p><strong> Question <%= question.order %></strong></p>
+            <p><%= question.question_text %></p>
+            <% if @presentation %>
+                <%# View responses for single presentation %>
+                <%= render 'question_responses', presentation: @presentation, question: question %>
+            <% else %> 
+                <ul class="list-group">
+                    <%# View responses for all presentations %>
+                    <li class="list-group-item">
+                        <% @form.attached_presentations.uniq.each do |presentation| %>
+                            <p> For <strong><%= presentation.name %></strong> (<%= presenter_names(presentation) %>)</p>
+                            <%= render 'question_responses', presentation: presentation, question: question%>
+                        <% end %>
+                    </li>
+                </ul>
+            <% end %>
+        </li>
+    <% end %>
+</ul>
+
+<%= link_to "Return", "javascript:history.back()", class: "btn btn-primary btn-large" %>
+<hr>
